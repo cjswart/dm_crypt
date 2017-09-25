@@ -1,0 +1,27 @@
+{
+  "name": "kpn-kpn-dm_crypt",
+  "version": "0.1.0",
+  "author": "kpn",
+  "license": "proprietary",
+  "kpn_quality_label": "A",
+  "kpn_module_owner": "Product Owner Platforms",
+  "kpn_module_support": "Puppet Development Team",
+  "summary": "configure an encrypted filesystem with dm crypt on linux",
+  "source": "git@github.tooling.kpn.org:kpn-puppet-forge/puppet-kpn-dm_crypt",
+  "project_page": "https://github.tooling.kpn.org/kpn-puppet-forge/puppet-kpn-dm_crypt",
+  "issues_url": "https://github.tooling.kpn.org/kpn-puppet-forge/puppet-kpn-dm_crypt/issues",
+  "tags": ["dm_crypt"],
+  "data_provider": "hiera",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [ "6.0", "7.0" ]
+    }
+  ],
+  "dependencies": [
+    { "name": "puppetlabs/stdlib", "version_requirement": ">=4.6.0 <5.0.0" }
+  ],
+  "requirements": [
+    { "name": "puppet", "version_requirement": "4.x" }
+  ]
+}

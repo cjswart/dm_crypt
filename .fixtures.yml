@@ -1,0 +1,5 @@
+fixtures:
+  repositories:
+    stdlib: 'git@github.tooling.kpn.org:kpn-puppet-forge/puppet-puppetlabs-stdlib'
+  symlinks:
+    dm_crypt: '#{source_dir}'

@@ -1,0 +1,7 @@
+---
+dm_crypt::some_string: running
+dm_crypt::package_version: 1.0
+dm_crypt::some_port: 8080
+dm_crypt::some_array:
+  - string1
+  - string2

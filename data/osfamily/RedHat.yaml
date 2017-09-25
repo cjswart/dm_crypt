@@ -1,0 +1,4 @@
+---
+dm_crypt::some_path: /tmp
+dm_crypt::package_name: rhel_package
+dm_crypt::service_name: rhel_service
