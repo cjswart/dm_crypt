@@ -1,20 +1,22 @@
 # == Class: dm_crypt
 
 class dm_crypt (
+  String         $disk_device,
+  String         $mount_point,
+  String         $filesystem_type,
   String         $ensure          = 'present',
-  String         $package_name    = 'cryptsetup',
-  String         $disk_device     = '/dev/sdb',
-  String         $mount_point     = '/data/storage',
+  String         $package         = 'cryptsetup',
 ) {
 
   # call the classes that do the real work
   class { '::dm_crypt::install': 
-    ensure       => $ensure,
-    package_name => $package_name,
+    ensure  => 'present',
+    package => $package,
   }
   -> class { '::dm_crypt::config': 
-    disk_device => $disk_device,
-    mount_point => $mount_point,
+    ensure          => $ensure,
+    disk_device     => $disk_device,
+    mount_point     => $mount_point,
+    filesystem_type => $filesystem_type,
   }
-  ~> class { '::dm_crypt::service': }
 }

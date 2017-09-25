@@ -1,8 +1,8 @@
-# <%= metadata.name %>
+# dm_crypt
 
 | Beaker | RSpec | Syntax |
 |:-:|:-:|:-:|
-| [![Build Status](https://jenkins.tooling.kpn.org:8443/job/module/job/kpn-<%= metadata.name %>/job/kpn-<%= metadata.name %>_4_acceptance/badge/icon)](https://jenkins.tooling.kpn.org:8443/job/module/job/kpn-<%= metadata.name %>/job/kpn-<%= metadata.name %>_4_acceptance/) | [![Build Status](https://jenkins.tooling.kpn.org:8443/job/module/job/kpn-<%= metadata.name %>/job/kpn-<%= metadata.name %>_3_unit/badge/icon)](https://jenkins.tooling.kpn.org:8443/job/module/job/kpn-<%= metadata.name %>/job/kpn-<%= metadata.name %>_3_unit/) | [![Build Status](https://jenkins.tooling.kpn.org:8443/job/module/job/kpn-<%= metadata.name %>/job/kpn-<%= metadata.name %>_2_syntax/badge/icon)](https://jenkins.tooling.kpn.org:8443/job/module/job/kpn-<%= metadata.name %>/job/kpn-<%= metadata.name %>_2_syntax/) |
+| [![Build Status](https://jenkins.tooling.kpn.org:8443/job/module/job/kpn-dm_crypt/job/kpn-dm_crypt_4_acceptance/badge/icon)](https://jenkins.tooling.kpn.org:8443/job/module/job/kpn-dm_crypt/job/kpn-dm_crypt_4_acceptance/) | [![Build Status](https://jenkins.tooling.kpn.org:8443/job/module/job/kpn-dm_crypt/job/kpn-dm_crypt_3_unit/badge/icon)](https://jenkins.tooling.kpn.org:8443/job/module/job/kpn-dm_crypt/job/kpn-dm_crypt_3_unit/) | [![Build Status](https://jenkins.tooling.kpn.org:8443/job/module/job/kpn-dm_crypt/job/kpn-dm_crypt_2_syntax/badge/icon)](https://jenkins.tooling.kpn.org:8443/job/module/job/kpn-dm_crypt/job/kpn-dm_crypt_2_syntax/) |
 
 #### Table of Contents
 
@@ -10,8 +10,8 @@
 2. [Module Description](#module-description)
 3. [Setup](#setup)
     * [Setup requirements](#setup-requirements)
-    * [What <%= metadata.name %> affects](#what-<%= metadata.name %>-affects)
-    * [Beginning with <%= metadata.name %>](#beginning-with-<%= metadata.name %>)
+    * [What dm_crypt affects](#what-dm_crypt-affects)
+    * [Beginning with dm_crypt](#beginning-with-dm_crypt)
 4. [Usage](#usage)
     * [Parameters](#parameters)
     * [Examples](#examples)
@@ -43,13 +43,13 @@ Also mention other module dependencies.
 This module requires: 
 - [puppetlabs-stdlib](https://github.tooling.kpn.org/kpn-puppet-forge/puppet-puppetlabs-stdlib) (version requirement: >= 4.6.0 <5.0.0)
 
-### What <%= metadata.name %> affects
+### What dm_crypt affects
 
 - A list of files, packages, services, or operations that the module will alter, impact, or execute on the system it is installed on.
 - This is a great place to stick any warnings.
 - Can be in list or paragraph form.
   
-### Beginning with <%= metadata.name %>
+### Beginning with dm_crypt
 
 The very basic steps needed for a user to get the module up and running.
 
@@ -127,7 +127,7 @@ Description: Array containing strings that should be used for something.
 #### Example 1: Minimal default installation
 
 ```puppet
-  class { '<%= metadata.name %>': 
+  class { 'dm_crypt': 
     some_regex          => 'bla123', 
     some_required_param => 'bla,'
   }
@@ -136,7 +136,7 @@ Description: Array containing strings that should be used for something.
 #### Example 2: Setting the default values for the module
 
 ```puppet
-  class { '<%= metadata.name %>':
+  class { 'dm_crypt':
     some_string         => 'started',
     some_boolean        => false,
     package_version     => '1.0',
@@ -169,7 +169,7 @@ This module works on:
 
 You can contribute by submitting issues, providing feedback and joining the discussions.
 
-Go to: `https://github.tooling.kpn.org/kpn-puppet-forge/<%= metadata.name %>`
+Go to: `https://github.tooling.kpn.org/kpn-puppet-forge/dm_crypt`
 
 If you want to fix bugs, add new features etc:
 - Fork it

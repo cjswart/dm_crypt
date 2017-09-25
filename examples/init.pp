@@ -8,8 +8,26 @@
 #
 # Learn more about module testing here:
 # http://docs.puppetlabs.com/guides/tests_smoke.html
+
 #
-class {'::dm_crypt':
-  some_required_param => 'abc',
-  some_regex          => 'abc123',
+#class { 'dm_crypt':
+#  ensure          => 'present',
+#  disk_device     => '/dev/sdb',
+#  mount_point     => '/apps/postgresDB',
+#  filesystem_type => 'ext4',
+#}
+crypt_init { 'postgresDB':
+  ensure          => 'present',
+  password        => $::encrypted_secret,
+  name            => 'postgresDB',
+  disk_device     => '/dev/sdk',
 }
+      # Configure crypt luks partition
+#crypt_mount { $label:
+#  ensure          => $ensure,
+#  name            => $label,
+#  filesystem_type => $filesystem_type,
+#  mount_point     => $mount_point,
+#}
+
+

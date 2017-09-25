@@ -6,21 +6,35 @@ describe 'dm_crypt class', :if => fact('osfamily') == 'RedHat' do
     # Using puppet_apply as a helper
     it 'should work idempotently with no errors' do
       pp = <<-EOS
-      class { 'dm_crypt': }
+      class { 'dm_crypt':
+        ensure          => 'present',
+        disk_device     => '/dev/sdb',
+	mount_point     => '/apps/postgresDB',
+	filesystem_type => 'ext4',
+      }
       EOS
 
       # Run it twice and test for idempotency
       apply_manifest(pp, :catch_failures => true)
       apply_manifest(pp, :catch_changes  => true)
     end
-
-    describe package('dm_crypt') do
+    describe package('cryptsetup') do
       it { is_expected.to be_installed }
     end
-
-    describe service('dm_crypt') do
-      it { is_expected.to be_enabled }
-      it { is_expected.to be_running }
+  end
+  context 'remove encrypted partiotion' do
+    it 'should work idempotently with no errors' do
+      pp = <<-EOS
+      class { 'dm_crypt':
+        ensure          => 'absent',
+        disk_device     => '/dev/sdb',
+	mount_point     => '/apps/postgresDB',
+	filesystem_type => 'ext4',
+      }
+      EOS
+      # Run it twice and test for idempotency
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes  => true)
     end
   end
 end
