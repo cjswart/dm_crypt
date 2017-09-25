@@ -4,7 +4,7 @@ describe 'dm_crypt' do
 
   default_params = {
     'ensure'       => 'present',
-    'package_name' => 'cryotsetup',
+    'package'      => 'cryptsetup',
     'disk_device'  => '/dev/sdb',
     'mount_point'  => '/data/storage',
   }

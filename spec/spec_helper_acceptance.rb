@@ -23,6 +23,20 @@ RSpec.configure do |c|
 
   # Configure all nodes in nodeset
   c.before :suite do
+    # create a virtual block device for beaker test
+    # create a 100M file in /opt
+    shell('dd if=/dev/zero of=/opt/sdb-backstore bs=1M count=100')
+
+    # create the loopback block device
+    # where 7 is the major number of loop device driver, grep loop /proc/devices
+    shell('mknod /dev/sdb b 7 200')
+    shell('losetup /dev/sdb  /opt/sdb-backstore')
+
+    # create certificates for test
+    shell('openssl genpkey -algorithm RSA  -out /etc/puppetlabs/puppet/ssl/private_keys/`hostname`.pem -pkeyopt rsa_keygen_bits:2048')
+    shell('openssl rsa -pubout -in /etc/puppetlabs/puppet/ssl/private_keys/`hostname`.pem -out /etc/puppetlabs/puppet/ssl/public_keys/`hostname`.pem')
+    shell('echo "hello world here i come" | openssl rsautl -encrypt -inkey /etc/puppetlabs/puppet/ssl/public_keys/`hostname`.pem -pubin | base64 >cyphertext.txt')
+ 
     ## Copy hiera
     #hierarchy = [
     #  '%{facts.os.family}-%{facts.os.release.major}',

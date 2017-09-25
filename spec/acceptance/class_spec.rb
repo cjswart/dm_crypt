@@ -13,14 +13,8 @@ describe 'dm_crypt class', :if => fact('osfamily') == 'RedHat' do
       apply_manifest(pp, :catch_failures => true)
       apply_manifest(pp, :catch_changes  => true)
     end
-
-    describe package('dm_crypt') do
+    describe package('cryptsetup') do
       it { is_expected.to be_installed }
-    end
-
-    describe service('dm_crypt') do
-      it { is_expected.to be_enabled }
-      it { is_expected.to be_running }
     end
   end
 end
