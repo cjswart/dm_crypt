@@ -35,7 +35,9 @@ RSpec.configure do |c|
     # create certificates for test
     shell('openssl genpkey -algorithm RSA  -out /etc/puppetlabs/puppet/ssl/private_keys/`hostname`.pem -pkeyopt rsa_keygen_bits:2048')
     shell('openssl rsa -pubout -in /etc/puppetlabs/puppet/ssl/private_keys/`hostname`.pem -out /etc/puppetlabs/puppet/ssl/public_keys/`hostname`.pem')
-    shell('echo "hello world here i come" | openssl rsautl -encrypt -inkey /etc/puppetlabs/puppet/ssl/public_keys/`hostname`.pem -pubin | base64 >cyphertext.txt')
+    shell('echo --- > /etc/facter/facts.d/secret.yaml')
+    shell('echo -n "encrypted_secret: " >> /etc/facter/facts.d/secret.yaml')
+    shell('echo "hello world here i come" | openssl rsautl -encrypt -inkey /etc/puppetlabs/puppet/ssl/public_keys/`hostname`.pem -pubin | base64 | tr -d "\n" >>/etc/facter/facts.d/secret.yaml')
  
     ## Copy hiera
     #hierarchy = [
