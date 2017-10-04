@@ -15,6 +15,8 @@ echo -n "C33s-J@N" | cryptsetup open --type luks /dev/sdb postgressDB
 openssl genpkey -algorithm RSA  -out /etc/puppetlabs/puppet/ssl/private_keys/xpmz6ugewi89hmz.vmpoolerdta.local.pem -pkeyopt rsa_keygen_bits:2048
 openssl rsa -pubout -in /etc/puppetlabs/puppet/ssl/private_keys/xpmz6ugewi89hmz.vmpoolerdta.local.pem -out /etc/puppetlabs/puppet/ssl/public_keys/xpmz6ugewi89hmz.vmpoolerdta.local.pem 
 
+facter -p encrypted_secret|base64 -d | openssl rsautl -decrypt -inkey /etc/puppetlabs/puppet/ssl/private_keys/`hostname`.pem
+
 mkfs /dev/mapper/postgressDB
 
 mount /dev/mapper/postgressDB /apps/postgressdb

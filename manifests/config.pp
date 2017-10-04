@@ -12,11 +12,19 @@ class dm_crypt::config (
 
   case "${facts['os']['family']}${facts['os']['release']['full']}" {
     /RedHat(6|7)/: {
-      file { '/apps':
+      file { ['/apps', '/apps/postgressDB']:
         ensure => directory,
         owner  => 'root',
         group  => 'root',
         mode   => '0755',
+      }
+      crypt { 'postgressDB':
+        ensure          => present,
+        password        => $::encrypted_secret,
+        name            => 'postgressDB',
+        device          => '/dev/sdb',
+        filesystem_type => 'xfs',
+        mount_point     => '/apps/postgressDB',
       }
     }
     default: { 

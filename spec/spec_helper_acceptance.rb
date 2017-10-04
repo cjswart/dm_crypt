@@ -37,7 +37,7 @@ RSpec.configure do |c|
     shell('openssl rsa -pubout -in /etc/puppetlabs/puppet/ssl/private_keys/`hostname`.pem -out /etc/puppetlabs/puppet/ssl/public_keys/`hostname`.pem')
     shell('echo --- > /etc/facter/facts.d/secret.yaml')
     shell('echo -n "encrypted_secret: " >> /etc/facter/facts.d/secret.yaml')
-    shell('echo "hello world here i come" | openssl rsautl -encrypt -inkey /etc/puppetlabs/puppet/ssl/public_keys/`hostname`.pem -pubin | base64 | tr -d "\n" >>/etc/facter/facts.d/secret.yaml')
+    shell('< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-64} | openssl rsautl -encrypt -inkey /etc/puppetlabs/puppet/ssl/public_keys/`hostname`.pem -pubin | base64 | tr -d "\n" >>/etc/facter/facts.d/secret.yaml')
  
     ## Copy hiera
     #hierarchy = [
