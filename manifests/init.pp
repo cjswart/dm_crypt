@@ -10,7 +10,7 @@ class dm_crypt (
 
   # call the classes that do the real work
   class { '::dm_crypt::install': 
-    ensure  => 'present',
+    ensure  => present,
     package => $package,
   }
   -> class { '::dm_crypt::config': 

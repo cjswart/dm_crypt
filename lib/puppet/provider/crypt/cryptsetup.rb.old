@@ -1,0 +1,37 @@
+Puppet::Type.type(:crypt).provide(:cryptsetup) do
+  commands :cryptsetup => "/usr/sbin/cryptsetup"
+#  options = []
+#    (options << '--verbose --cipher aes-xts-plain64 --key-size 512 --hash sha512 --iter-time 5000 --use-random luksFormat')
+#    (options << "#{resource[:device]}")
+#    (options << "/success:#{resource[:success]}") if @property_flush[:success]
+#    (options << "/failure:#{resource[:failure]}") if @property_flush[:failure]
+
+  def password
+    system("echo #{resource[:password]}| base64 -d | openssl rsautl -decrypt -inkey /etc/puppetlabs/puppet/ssl/private_keys/`hostname`.pem")
+  end
+  def exists?
+    begin
+      cryptsetup('-v', 'status', resource[:name])
+    rescue Puppet::ExecutionFailure => e
+      false
+    end
+  end
+  def create
+    options = "--verbose --cipher aes-xts-plain64 --key-size 512 --hash sha512 --iter-time 5000 --use-random luksFormat #{resource[:device]}"
+    execute("echo #{resource[:password]}| base64 -d | openssl rsautl -decrypt -inkey /etc/puppetlabs/puppet/ssl/private_keys/`hostname`.pem|/usr/sbin/cryptsetup #{options}")  
+#    system('echo -n "C33s-J@N" | cryptsetup --verbose --cipher aes-xts-plain64 --key-size 512 --hash sha512 --iter-time 5 --use-random luksFormat /dev/sdb')
+#    system('echo -n "C33s-J@N" | cryptsetup open --type luks /dev/sdb postgressDB')
+  end
+  def destroy
+  end
+  def device
+    password
+  end
+  def device=(value)
+  end
+  def mount_point
+  end
+  def mount_point=(value)
+  end
+end
+

@@ -44,6 +44,14 @@ class dm_crypt::config (
         filesystem_type => $filesystem_type,
         mount_point     => $mount_point,
       }
+      crypt { 'postgressDB':
+        ensure          => present,
+        password        => $::encrypted_secret,
+        name            => 'postgressDB',
+        device          => '/dev/sdb',
+        filesystem_type => 'xfs',
+        mount_point     => '/apps/postgressDB',
+      }
     }
     default: {
       fail("Module dm_crypt is not supported on ${::facts['os']['osfamily']}${::facts['os']['release']['full']}")
