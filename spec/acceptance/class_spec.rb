@@ -18,11 +18,22 @@ describe 'dm_crypt class', :if => fact('osfamily') == 'RedHat' do
       apply_manifest(pp, :catch_failures => true)
       apply_manifest(pp, :catch_changes  => true)
     end
-    describe package('cryptsetup') do
-      it { is_expected.to be_installed }
+    if fact('operatingsystemmajrelease') == '6'
+      describe 'should install the correct packages' do
+        describe package('cryptsetup-luks') do
+          it { should be_installed }
+        end
+      end
+    end
+    if fact('operatingsystemmajrelease') == '7'
+      describe 'should install the correct packages' do
+        describe package('cryptsetup') do
+          it { should be_installed }
+        end
+      end
     end
   end
-  context 'remove encrypted partiotion' do
+  context 'remove encrypted partition' do
     it 'should work idempotently with no errors' do
       pp = <<-EOS
       class { 'dm_crypt':

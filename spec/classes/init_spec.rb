@@ -59,8 +59,7 @@ describe 'dm_crypt' do
 	    'mode'   => '0755',
 	  )
 	}
-        it { is_expected.to contain_crypt_init('storage') }
-        it { is_expected.to contain_crypt_mount('storage') }
+        it { is_expected.to contain_crypt('storage') }
         it { is_expected.to contain_package('cryptsetup') }
       end
     end

@@ -1,38 +1,33 @@
 Puppet::Type.newtype(:crypt) do
   desc <<-EOT
-    Ensures that an given device is fully encrypted and not readable if unmounted and closed.
+    Creates an fully encrypted Luks partition.
     Example:
     crypt { 'postgressDB':
-      ensure      => present,
-      name        => 'postgressDB',
-      device      => '/dev/sdb',
-      moint_point => '/apps/postgressDB',
-      password    => 'secret',
+      ensure          => present,
+      name            => 'postgressDB',
+      disk_device     => '/dev/sdb',
+      mount_point     => '/apps/postgresDB',
+      filesystem_type => 'ext4',
+      password        => 'secret',
     }
   EOT
   validate do
-    fail('device is required when ensure is present') if self[:ensure] == :present and self[:device].nil?
-  end 
+    fail('disk_device is required when ensure is present') if self[:ensure] == :present and self[:disk_device].nil?
+  end
   ensurable do
     defaultvalues
     defaultto :present
   end
-
   newparam(:name, :namevar => true) do
     desc 'An arbitrary name used as the label for this device.'
   end
-
-  newproperty(:device) do
+  newparam(:disk_device) do
     desc 'The device to be encrypted.'
     validate do |value|
       unless Pathname.new(value).absolute?
         fail("Invalid device #(value)")
       end
     end
-  end
-  newproperty(:filesystem_type) do
-    desc 'The filesystem type for this device.'
-    newvalues(:xfs, :ext4)
   end
   newproperty(:mount_point) do
     desc 'Mount point for the encrypted device.'
@@ -42,9 +37,11 @@ Puppet::Type.newtype(:crypt) do
       end
     end
   end
-
   newparam(:password) do
     desc 'Password to create and open the encrypted device'
   end
-
+  newparam(:filesystem_type) do
+    desc 'The filesystem type for this device.'
+    newvalues(:xfs, :ext4)
+  end
 end

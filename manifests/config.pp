@@ -7,6 +7,7 @@ class dm_crypt::config (
   $disk_device     = undef,
   $filesystem_type = undef,
   $mount_point     = undef,
+  $password        = undef,
 ){
 
   # Make this a private class
@@ -31,16 +32,11 @@ class dm_crypt::config (
         $label = $2
       }
       # Configure crypt luks partition 
-      crypt_init { $label:
+      crypt { $label:
         ensure          => $ensure,
-        password        => $::encrypted_secret,
+        password        => $password,
         name            => $label,
         disk_device     => $disk_device,
-      }
-      # Configure crypt luks partition 
-      crypt_mount { $label:
-        ensure          => $ensure,
-        name            => $label,
         filesystem_type => $filesystem_type,
         mount_point     => $mount_point,
       }

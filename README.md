@@ -21,151 +21,127 @@
 
 ## Overview
 
-A one-maybe-two sentence summary of what the module does/what problem it solves.
-This is your 30 second elevator pitch for your module.
+This module will create a encrypted partion for a device using dm-crypt cryptsetup.
+Be very carefull to keep you secret otherwise your data is never accessable again.
 
-## Module Description
+## Module Description 
 
-If applicable, this section should have a brief description of the technology the module integrates with and what that integration enables.
-This section should answer the questions: "What does this module do?" and "Why would I use it?".
+This module creates an encrypted partion on a disk device with the executable cryptsetup.
+You need to specify the disk device which will be encrypted.
+You need to specitfy the mount point to mount the encrypted partition.
+You need to specify the filesystem type to format the encrypted partition.
+You need to supply a base64 encrypted password based on the puppet agent certificates.
 
-If your module has a range of functionality (installation, configuration, management, etc.) this is the time to mention it.
+## Setup 
 
-## Setup
 
-The basics of getting started with this module.
-
-### Setup Requirements
-
-If your module requires anything extra before setting up (pluginsync enabled, etc.), mention it here.
-Also mention other module dependencies.
+### Setup  Requirements
 
 This module requires: 
 - [puppetlabs-stdlib](https://github.tooling.kpn.org/kpn-puppet-forge/puppet-puppetlabs-stdlib) (version requirement: >= 4.6.0 <5.0.0)
 
+
 ### What dm_crypt affects
 
-- A list of files, packages, services, or operations that the module will alter, impact, or execute on the system it is installed on.
-- This is a great place to stick any warnings.
-- Can be in list or paragraph form.
+- The package cryptsetup will be installed.
+- The directory path of the suplied mountpoint will be created.
+- cryptsetup is used to create the encrypted luks device with a key based on the supplied password.
+- cryptsetup will open de the device with a label (label will be the last directory of the supplied mountpoint).
+- mkfs will format de newly created encrypted partion /dev/mapper/<label>.
+- the new device will be mounted on the suplied mountpoint.
+
+You have to supply a base64 encrypted password based on the puppet agents certificates to create the partion.
+Keep this password on a safe place because it is needed to open and mount the device otherwise you're data is never accessable again.
+For example creating a base64 encrypted password based on de puppet agent public key:
+echo "my secret passphrase" | openssl rsautl -encrypt -inkey /etc/puppetlabs/puppet/ssl/public_keys/`hostname`.pem -pubin | base64 | tr -d "\n"
   
 ### Beginning with dm_crypt
 
-The very basic steps needed for a user to get the module up and running.
-
-If your most recent release breaks compatibility or requires particular steps for upgrading,
-you may wish to include an additional section here: Upgrading (For an example, see http://forge.puppetlabs.com/puppetlabs/firewall).
-
 ## Usage
-
-Put the parameters, classes, types, and resources for customizing, configuring, and doing the fancy stuff with your module here. 
 
 ### Parameters
 
 This module accepts the following parameters:
 
-#### some_regex (required)
+  String         $disk_device,
+  String         $mount_point,
+  String         $filesystem_type,
+  String         $password        = $::encrypted_secret,
+  String         $ensure          = 'present',
+  String         $package         = 'cryptsetup',
 
+#### disk_device (required)
 Type: string  
 Default: `undef`  
-Values: any valid string containing letters or numbers.  
-Description: This string is mandatory and contains an alphanumeric string.
+Values: any valid string representing a existing disk device for example /dev/sdb 
+Description: This parameter contains a tring with the disk device used for the encrypted partition
 
-#### some_required_param (required)
-
+#### mount_point (required)
 Type: string  
 Default: `undef`  
-Values: any valid string (not empty)  
-Description: This parameter contains some string that will be used in the module.
+Values: any valid string with a valid abslotu path of the mount point where the encrypted partion will be mounted 
+Description: This parameter contains the mount point an the last directory of the path will be used as the label for the encrypted luks device
 
-#### some_string
+#### filesytem_type (required)
+Type: Enum[string]  
+Default: `undef`  
+Values: 'ext4' or 'xfs' 
+Description: This parameter contains the filesystem type for mkfs to format the new encrypted partion.
 
-Type: string  
-Default: `'started'`  
-Values: `'started'`, `'stopped'`  
-Description: Ensures that service_status is running or stopped.
+#### password (required)
+type: string
+Default: `undef`  
+Values: base64 encrypted string based on the puppet agent certificates
+Description: This parameter contains the encrypted password in base64 format encryption based on the puppet agent certificates
+you can supply this password as external fact encrypted_secret
 
-#### some_boolean
-
-Type: boolean  
-Default: `false` (RHEL5/6, windows 2008/R2), `true` (RHEL7, windows 2012/R2)  
-Values: `true`, `false`  
-Description: Ensures the file.txt is read-only for all users when set to true.
-If set to false the file.txt will have read/write/execute permissions for everyone.
-
-#### package_version
+#### ensure 
 
 Type: string  
-Default: `'1.0'`  
-Values: any version in the repository, in format 'X.Y'  
-Description: The version of the package that will be installed.
+Default: `'present'`
+Values: `'present'`, `'absent'`  
+Description: Ensures that  resource will be created or removed.
+Be carefull to remove the resource because any data on the encrypted partition will be lost
 
-#### some_port
-
-Type: integer  
-Default: `8080`  
-Values: `1 - 65535`  
-Description: Sets the the port number at which the application should be accessed.
-**Note:** This parameter has no effect in this module.
-
-#### some_path
+#### package
 
 Type: string  
-Default: `'C:\Temp'` (windows) or `'\tmp'`   
-Values: Any accessible pathname.  
-Description: A string containing the some_path filepath for the `file.txt` and `file_example.txt`.
-
-#### some_array
-
-Type: array of strings  
-Default: `[ 'string1', 'string2' ]`  
-Values: a valid array of strings  
-Description: Array containing strings that should be used for something.
+Default: `'cryptsetup'`  
+Values: any velis sting with the coreect package name  
+Description: The package that will be installed.
 
 ### Examples
 
-#### Example 1: Minimal default installation
-
-```puppet
-  class { 'dm_crypt': 
-    some_regex          => 'bla123', 
-    some_required_param => 'bla,'
-  }
-```
-
-#### Example 2: Setting the default values for the module
+#### Example 1: Setting the default values for the module
 
 ```puppet
   class { 'dm_crypt':
-    some_string         => 'started',
-    some_boolean        => false,
-    package_version     => '1.0',
-    some_port           => 8080,
-    some_array          => [ 'string1', 'string2' ],
-    some_regex          => 'bla123', 
-    some_required_param => 'bla,'
-  }
+    ensure          => 'present',
+    disk_device     => '/dev/sdb',
+    mount_point     => '/apps/postgresDB',
+    filesystem_type => 'ext4',
+    password        => $::encrypted_secret,
+  }  
 ```
 
 ## Reference
+classes:
+* dm_crypt::init
+* dm_crypt::install
+* dm_crypt::config
+types:
+* lib/puppet/type/crypt.rb
+providers:
+* lib/puppet/providers/crypt/rhel7.rb
+* lib/puppet/providers/crypt/rhel6.rb
 
-Here, list the classes, types, providers, facts, etc contained in your module.
-This section should include all of the under-the-hood workings of your module
-so people know what the module is touching on their system but don't need to mess with things.
-(We are working on automating this section!)
+## Limitat ions
 
-## Limitations
-
-This is where you list OS compatibility, version compatibility, etc.
-
-This module works on:
+This module works only on:
 * RedHat 6
 * RedHat 7
-* Windows 2008 R2
-* Windows 2012
-* Windows 2012 R2
 
-## Development
+## Development 
 
 You can contribute by submitting issues, providing feedback and joining the discussions.
 

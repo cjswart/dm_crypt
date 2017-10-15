@@ -16,7 +16,7 @@
 #  mount_point     => '/apps/postgresDB',
 #  filesystem_type => 'ext4',
 #}
-crypt_init { 'postgresDB':
+crypt { 'postgresDB':
   ensure          => 'present',
   password        => $::encrypted_secret,
   name            => 'postgresDB',

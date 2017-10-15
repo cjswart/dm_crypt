@@ -4,6 +4,7 @@ class dm_crypt (
   String         $disk_device,
   String         $mount_point,
   String         $filesystem_type,
+  String         $password        = $::encrypted_secret,
   String         $ensure          = 'present',
   String         $package         = 'cryptsetup',
 ) {
@@ -18,5 +19,6 @@ class dm_crypt (
     disk_device     => $disk_device,
     mount_point     => $mount_point,
     filesystem_type => $filesystem_type,
+    password        => $password
   }
 }
