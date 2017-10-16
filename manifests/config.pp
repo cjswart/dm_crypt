@@ -3,47 +3,40 @@
 # This class is called from dm_crypt
 #
 class dm_crypt::config (
-  $ensure          = present,
-  $disk_device     = undef,
-  $filesystem_type = undef,
-  $mount_point     = undef,
-  $password        = undef,
+  $ensure          = $::dm_crypt::config_ensure,
+  $disk_device     = $::dm_crypt::disk_device,
+  $filesystem_type = $::dm_crypt::filesystem_type,
+  $mount_point     = $::dm_crypt::mount_point,
+  $password        = $::dm_crypt::password,
 ){
 
   # Make this a private class
   assert_private("Use of private class ${name} by ${caller_module_name} not allowed.")
 
-  case "${facts['os']['family']}${facts['os']['release']['full']}" {
-    /RedHat(6|7)/: {
-     # Create directory tree from $mount_point
-     $mount_point.split('/').reduce |$memo, $value| {
-        notice("${memo}/${value}")
-        file { "${memo}/${value}":
-          ensure => 'directory',
-          owner   => 'root',
-          group   => 'root',
-          mode    => '0755',
-        }
-        "${memo}/${value}"
-      }
-      # get label name from directory name without the complete path
-      if $mount_point =~ /(.*\/)(.*.)/ {
-        $base_path = $1
-        $label = $2
-      }
-      # Configure crypt luks partition 
-      crypt { $label:
-        ensure          => $ensure,
-        password        => $password,
-        name            => $label,
-        disk_device     => $disk_device,
-        filesystem_type => $filesystem_type,
-        mount_point     => $mount_point,
-      }
+  # Create directory tree from $mount_point
+  $mount_point.split('/').reduce |$memo, $value| {
+    notice("${memo}/${value}")
+    file { "${memo}/${value}":
+      ensure => 'directory',
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0755',
     }
-    default: {
-      fail("Module dm_crypt is not supported on ${::facts['os']['osfamily']}${::facts['os']['release']['full']}")
-    }
+    "${memo}/${value}"
+  }
+  # get label name from directory name without the complete path
+  if $mount_point =~ /(.*\/)(.*.)/ {
+    $base_path = $1
+    $label = $2
+  }
+  # Configure crypt luks partition
+  crypt { $label:
+    ensure          => $ensure,
+    password        => $password,
+    name            => $label,
+    disk_device     => $disk_device,
+    filesystem_type => $filesystem_type,
+    mount_point     => $mount_point,
   }
 }
 

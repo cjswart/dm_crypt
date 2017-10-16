@@ -1,6 +1,11 @@
-YYYY-MM-DD Release 0.0.2
-- Updated something
+2017-10-16 Release 0.2.0
+- package_name & package_ensure, so package can be removed
+- Moved data to hiera-structure
+- Removed default values from config.pp and install.pp (no need)
+- Fixed syntax issues
+- Fixed beaker, remove crypt package from image when present before apply
+- Fixed rspec, the package is different on RH6 & RH7, check the right package
 
-YYYY-MM-DD Release 0.0.1
-- Something you did
-- Something else you did
+2017-10-13 Release 0.1.0
+
+- First Release

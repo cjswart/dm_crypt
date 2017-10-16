@@ -1,7 +1,5 @@
 ---
-dm_crypt::some_string: running
-dm_crypt::package_version: 1.0
-dm_crypt::some_port: 8080
-dm_crypt::some_array:
-  - string1
-  - string2
+dm_crypt::password: "%{encrypted_secret}"
+dm_crypt::config_ensure: 'present'
+dm_crypt::package_ensure: 'present'
+dm_crypt::package_name: 'cryptsetup'
