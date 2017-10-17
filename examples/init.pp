@@ -17,12 +17,12 @@
 #  filesystem_type => 'ext4',
 #}
 crypt { 'postgresDB':
-  ensure          => 'present',
-  password        => $::encrypted_secret,
-  name            => 'postgresDB',
-  disk_device     => '/dev/sdk',
+  ensure      => 'present',
+  password    => $::encrypted_secret,
+  name        => 'postgresDB',
+  disk_device => '/dev/sdk',
 }
-      # Configure crypt luks partition
+# Configure crypt luks partition
 #crypt_mount { $label:
 #  ensure          => $ensure,
 #  name            => $label,

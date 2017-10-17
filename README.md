@@ -61,15 +61,16 @@ echo "my secret passphrase" | openssl rsautl -encrypt -inkey /etc/puppetlabs/pup
 
 ### Parameters
 
-This module accepts the following parameters:
-
-  String         $disk_device,
-  String         $mount_point,
-  String         $filesystem_type,
-  String         $password        = $::encrypted_secret,
-  String         $ensure          = 'present',
-  String         $package         = 'cryptsetup',
-
+This module accepts the following parameters:  
+  
+  String         $disk_device,  
+  String         $mount_point,  
+  String         $filesystem_type,  
+  String         $password,  
+  String         $config_ensure,  
+  String         $pacakge_ensure,  
+  String         $package_name,  
+  
 #### disk_device (required)
 Type: string  
 Default: `undef`  
@@ -95,7 +96,7 @@ Values: base64 encrypted string based on the puppet agent certificates
 Description: This parameter contains the encrypted password in base64 format encryption based on the puppet agent certificates
 you can supply this password as external fact encrypted_secret
 
-#### ensure 
+#### config_ensure 
 
 Type: string  
 Default: `'present'`
@@ -103,7 +104,15 @@ Values: `'present'`, `'absent'`
 Description: Ensures that  resource will be created or removed.
 Be carefull to remove the resource because any data on the encrypted partition will be lost
 
-#### package
+#### package_ensure 
+
+Type: string  
+Default: `'present'`
+Values: `'present'`, `'absent'`  
+Description: Ensures that package will be installed or removed.  
+Be carefull to remove the resource because any data on the encrypted partition will be lost
+
+#### package_name
 
 Type: string  
 Default: `'cryptsetup'`  
