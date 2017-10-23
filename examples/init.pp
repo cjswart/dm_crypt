@@ -10,24 +10,10 @@
 # http://docs.puppetlabs.com/guides/tests_smoke.html
 
 #
-#class { 'dm_crypt':
-#  ensure          => 'present',
-#  disk_device     => '/dev/sdb',
-#  mount_point     => '/apps/postgresDB',
-#  filesystem_type => 'ext4',
-#}
-crypt { 'postgresDB':
-  ensure      => 'present',
-  password    => $::encrypted_secret,
-  name        => 'postgresDB',
-  disk_device => '/dev/sdk',
+class { 'dm_crypt':
+  ensure          => 'present',
+  disk_device     => '/dev/sdb',
+  mount_point     => '/apps/postgresDB',
+  password        => $encrypted_secret,
+  filesystem_type => 'ext4',
 }
-# Configure crypt luks partition
-#crypt_mount { $label:
-#  ensure          => $ensure,
-#  name            => $label,
-#  filesystem_type => $filesystem_type,
-#  mount_point     => $mount_point,
-#}
-
-
